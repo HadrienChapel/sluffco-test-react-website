@@ -1,0 +1,36 @@
+name: Deploy Vue.js App
+
+on:
+  push:
+    branches:
+      - main  # Déclenche le workflow sur les pushes vers la branche principale.
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Vérification du code source
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Installation de Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    # Installation des dépendances
+    - name: Install dependencies
+      run: npm install
+
+    # Construction du projet Vue.js
+    - name: Build Vue.js app
+      run: npm run build
+
+    # Déploiement sur GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
